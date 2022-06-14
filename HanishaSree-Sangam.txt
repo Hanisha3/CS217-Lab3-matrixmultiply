@@ -1,0 +1,24 @@
+
+CS 217       LAB-3   
+
+Q1) On Bender, compare the execution time of a 256 x 256 square matrix multiplication compared to a 1024 x 64 and 64 x 1024 rectangular matrix multiply. All input matricies have 65k entries. What do you observe? Which is faster? Can you explain the observed behavior? Tip: You may want to comment out the verify() function in main.cu when timing this question.
+Ans : Kernel execution time is 0.000091s(256 X 256) Kernel execution time is 0.000192s(64 X 1024) Therefore, the 256*256 square matrix multiplication is faster. I think it is because there are more context switches.
+Q2) Conceptual Question: For a 64 square tiled matrix multiplication, how many times is each element of the input matrices loaded from global memory? Assume 16x16 tiles.
+Ans : Every element of the input matrices is loaded 4 times from global memory.
+Q3) Conceptual Question: For a 64 square non-tiled matrix multiplication, how many times is each element of the input matrices loaded from global memory?
+Ans : Every element of the input matrices loaded 64 times from global memory.
+Q4) GPGPU-Sim related question: In this part, we will compare the execution of a 128x128 square tiled matrix multiplication across different tile sizes. Run ./sgemm-tiled 128 in GPGPU-Sim with TILE_SIZE of 8, 16 (default), and 32. Fill the following table:
+Ans : 
+Tile size              8        16      32       Note
+gpu_tot_sim_cycle      42311    27764   57302    Total cycles
+gpu_tot_ipc            430.9    458.5   393.7    Instruction per cycle
+gpgpu_n_load_insn      524288   262144  131072   Total loads to global memory
+gpgpu_n_store_insn     16384    16384   16384    Total stores to global memory
+gpgpu_n_shmem_insn     4718592  4456448 4325376  Total accesses to shared memory
+
+
+
+Q5) Which tile size resulted in the least number of accesses to global memory? Which tile size resulted in the most number of accesses to global memory? What is the reasoning behind this observation?
+Ans : 32 tile size needs the least number of accesses to global memory. 8 tile size needs the most number of accesses to global memory. The number of accesses to global memory is the number of tiles of row divided by column. So if tile size is larger, smaller number of tiles and smaller number of accesses of global memory.
+Q6) Which tile size performed the fastest, which tile size performed the slowest? Why do you think that is?
+Ans : 16 tile size performed the fastest and 32 tile size performed the slowest. Because of the limited shared memory and maximum threads.
